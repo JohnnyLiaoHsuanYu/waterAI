@@ -18,7 +18,6 @@ from bs4 import BeautifulSoup
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
-
 from lib.log_module import CustomLog
 # from lib.get_resevior_data import get_dates_in_range, get_resevior_data
 
@@ -26,7 +25,6 @@ from lib.log_module import CustomLog
 
 log_path = os.path.join("D:", "2310011_Liao", "水資源" , "done_model", "drought", "logg", "dr_model.log")
 logger = CustomLog(log_path, "DROUGHT")
-
 
 now = datetime.datetime.now()
 time_noww = now.strftime('%Y/%m/%d %H:%M:%S')
@@ -57,7 +55,6 @@ count_name = ['基隆市、新北市(淡水區、三芝區、金山區、石門�
               '屏東縣'
               ]
 
-
 stations = [['基隆', '鞍部', '新北'],
             ['臺北', '竹子湖'],
             ['淡水', '新北'],
@@ -74,13 +71,11 @@ stations = [['基隆', '鞍部', '新北'],
             ['高雄', '恆春'],
            ]
 
-
 need_resevior_name = ['仁義潭水庫', '南化水庫', '寶山水庫', '寶山第二水庫', '德基水庫', '新山水庫', '日月潭水庫', '明德水庫', \
                       '曾文水庫', '永和山水庫', '湖山水庫', '澄清湖水庫', '烏山頭水庫', '牡丹水庫', '石岡壩', '石門水庫', '翡翠水庫', '蘭潭水庫', \
                       '阿公店水庫', '集集攔河堰', '鯉魚潭水庫', '鳳山水庫']
 
 water_warn = ['水情正常', '水情稍緊', '一階限水', '二階限水', '三階限水']
-
 
 
 # =================== input needed model & data ===================
@@ -121,7 +116,7 @@ class ModelDataLoader:
 
 
 path___ = 'D:/2310011_Liao/水資源/'
-model_name_dr = 'done_model/drought/waterAI_XGBRegressor_new.joblib'
+model_name_dr = 'done_model/drought/waterAI_DecisionTreeRegressor_new.joblib'
 data_loader = ModelDataLoader(path___, model_name_dr)
 
 
