@@ -84,7 +84,6 @@ water_warn = ['水情正常', '水情稍緊', '一階限水', '二階限水', '�
 
 
 # =================== input needed model & data ===================
-
 class ModelDataLoader:
     def __init__(self, base_path, model_name):
         self.base_path = base_path
@@ -126,21 +125,14 @@ model_name_dr = 'done_model/drought/waterAI_XGBRegressor_new.joblib'
 data_loader = ModelDataLoader(path___, model_name_dr)
 
 
-
-
 # =================== input ymal data ===================
-
 conf_path = 'D:/2310011_Liao/水資源/CODE/config/resevoir_config.yaml'
 with open(conf_path, "r", encoding="utf-8") as file:
     resevior_config = yaml.safe_load(file)
 
 
-
-
-# =================== precipitation forcast & future date ===================
-
+# =================== precipitation data & future date ===================
 TODAY = datetime.date.today()
-
 
 last_Month = TODAY - relativedelta(months=1)
 last_YY = last_Month.year
@@ -161,7 +153,7 @@ if response.status_code == 200:
         except:
             CWA_record_rain[title] = rain_MMAvg
 
-
+# ============ tranform into the form we needed ============
 need_precip_info = []
 for iiii in range(3):
     county_grab = np.unique(np.array(data_loader.region_df.loc[data_loader.region_df['four_region']==iiii]['region']))
@@ -183,16 +175,13 @@ for iiii in range(3):
 
 
 # ===========================
-
 #url_resevior = 'https://fhy.wra.gov.tw/ReservoirPage_2011/StorageCapacity.aspx'
-
 #last_Ten_days = TODAY - relativedelta(days=11)
 #date_range = get_dates_in_range(int(last_Ten_days.strftime('%Y%m%d')), int((TODAY-relativedelta(days=1)).strftime('%Y%m%d')))
 #resevior_rain = get_resevior_data(url_resevior, date_range)        
 
 
-# ===========================
-
+# ============= get the future date==============
 url_time = 'https://www.cwa.gov.tw/Data/fcst_pdf/FW14.pdf'
 response = requests.get(url_time)
 if response.status_code == 200:
@@ -273,10 +262,7 @@ def process_region(inn, test_region, test_resevior_name, test_four_region, resev
 
     return pred_resevior_mean, precip, resevior
 
-
-
-
-##### deal with date data #####
+# =========== LET'S START THE PREDICTION ===========
 ppprediction = np.full([len(date_time), data_loader.region_df.shape[0]], np.nan)
 test_resevior_all = np.full([len(date_time), data_loader.region_df.shape[0]], np.nan)
 test_precip_all = np.full([len(date_time), data_loader.region_df.shape[0]], np.nan)
@@ -341,16 +327,6 @@ predic_name = model_name_dr[:-7]
 
 jsonfile = open(predic_path + 'waterAI_result___.json', mode='w')
 output = []
-#for i in range(test_data.shape[0]):
-#    output.append({'date': '%s-%s'%(date_time[0], date_time[-1]),
-#                   'county': count_name[int(test_data['region'][i])],
-#                   'lon': test_data['LON'][i],
-#                   'lat': test_data['LAT'][i],
-#                   'level': int(predictions[i]),
-#                   'warnname': water_warn[int(predictions[i])]
-#
-#    })
-
 for i in range(test_data.shape[0]):
     output.append({'date': '%s-%s'%(date_time[0], date_time[-1]),
                    'lon': test_data['LON'][i],
